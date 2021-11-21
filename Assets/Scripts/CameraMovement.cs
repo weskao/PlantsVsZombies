@@ -5,6 +5,7 @@ namespace Project.Movement
 {
     public class CameraMovement : MonoBehaviour
     {
+        [SerializeField]
         private Camera _camera;
 
         private Vector3 _dragOrigin;
