@@ -43,7 +43,7 @@ namespace Project.Movement
 
         private void Update()
         {
-            PanCamera();
+            DetectTouch();
         }
         
         private void SetCameraBound()
@@ -55,7 +55,7 @@ namespace Project.Movement
             _mapMaxY = _mapRenderer.transform.position.y + _mapRenderer.bounds.size.y / 2f;
         }
 
-        private void PanCamera()
+        private void DetectTouch()
         {
             // Save position of mouse in world space when drag starts (first time clicked)
             if (Input.GetMouseButtonDown(0))
@@ -63,13 +63,7 @@ namespace Project.Movement
                 _dragOrigin = _sceneCamera.ScreenToWorldPoint(Input.mousePosition);
             }
 
-
-            if (Input.touchCount == 2)
-            {
-
-            }
-            // Calculate distance between drag origin and new position if it is still held down
-            else if (Input.GetMouseButton(0))
+             if (Input.GetMouseButton(0))
             {
                 var newPosition = _sceneCamera.ScreenToWorldPoint(Input.mousePosition);
                 var difference = _dragOrigin - newPosition;
@@ -94,6 +88,12 @@ namespace Project.Movement
                 ZoomCamera(CameraZoomMode.Out);
             }
         }
+        
+        void ZoomCameraByTouch(float increment)
+        {
+            _sceneCamera.orthographicSize = Mathf.Clamp(_sceneCamera.orthographicSize - increment, _minCameraSize, _maxCameraSize);
+        }
+
 
         private void ZoomCamera(CameraZoomMode mode)
         {

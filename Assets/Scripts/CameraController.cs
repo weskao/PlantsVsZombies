@@ -85,7 +85,6 @@ namespace Project.Movement
         {
             _sceneCamera.orthographicSize = Mathf.Clamp(_sceneCamera.orthographicSize - increment, _minCameraSize, _maxCameraSize);
         }
-
         
         private void ZoomCameraByMouse(CameraZoomMode mode)
         {
