@@ -5,6 +5,12 @@ using UnityEngine.UI;
 
 namespace Project.Movement
 {
+    public enum CameraZoomMode
+    {
+        In,
+        Out
+    }
+
     public class CameraMovement : MonoBehaviour
     {
         [SerializeField]
@@ -28,49 +34,31 @@ namespace Project.Movement
         [SerializeField]
         private SpriteRenderer _mapRenderer = null;
 
-        private float _mapMinX, _mapMaxX, _mapMinY, _maxMaxY;
+        private float _mapMinX, _mapMaxX, _mapMinY, _mapMaxY;
 
         public bool MouseScrollForward => Input.GetAxis("Mouse ScrollWheel") > 0f;
 
         public bool MouseScrollBackward => Input.GetAxis("Mouse ScrollWheel") < 0f;
 
         private Vector3 _dragOrigin;
-
+        
         private void Awake()
         {
             SetCameraBound();
-            RegisterClickEvent();
         }
 
         private void Update()
         {
             PanCamera();
         }
-
-        private void OnDestroy()
-        {
-            DeregisterClickEvent();
-        }
-
+        
         private void SetCameraBound()
         {
             _mapMinX = _mapRenderer.transform.position.x - _mapRenderer.bounds.size.x / 2f;
             _mapMaxX = _mapRenderer.transform.position.x + _mapRenderer.bounds.size.x / 2f;
 
             _mapMinY = _mapRenderer.transform.position.y - _mapRenderer.bounds.size.y / 2f;
-            _maxMaxY = _mapRenderer.transform.position.y + _mapRenderer.bounds.size.y / 2f;
-        }
-
-        private void RegisterClickEvent()
-        {
-            _zoomInButton.onClick.AddListener(() => { Zoom(ZoomMode.In); });
-            _zoomOutButton.onClick.AddListener(() => { Zoom(ZoomMode.Out); });
-        }
-
-        private void DeregisterClickEvent()
-        {
-            _zoomInButton.onClick.RemoveListener(() => { Zoom(ZoomMode.In); });
-            _zoomOutButton.onClick.RemoveListener(() => { Zoom(ZoomMode.Out); });
+            _mapMaxY = _mapRenderer.transform.position.y + _mapRenderer.bounds.size.y / 2f;
         }
 
         private void PanCamera()
@@ -97,38 +85,41 @@ namespace Project.Movement
 
             if (MouseScrollForward)
             {
-                Zoom(ZoomMode.In);
+                ZoomCamera(CameraZoomMode.In);
             }
 
             if (MouseScrollBackward)
             {
-                Zoom(ZoomMode.Out);
+                ZoomCamera(CameraZoomMode.Out);
             }
         }
 
-        private void Zoom(ZoomMode mode)
+        private void ZoomCamera(CameraZoomMode mode)
         {
-            Debug.Log($"Wes - Zoom, mode = {mode}");
-            int modeMultiplier = mode == ZoomMode.In ? -1 : 1;
+            int modeMultiplier = mode == CameraZoomMode.In ? -1 : 1;
             float newSize = _camera.orthographicSize + _zoomStep * modeMultiplier;
             _camera.orthographicSize = Mathf.Clamp(newSize, _minCameraSize, _maxCameraSize);
+            
             _camera.transform.position = ClampCamera(_camera.transform.position);
         }
 
         // Because the size of camera may be changed by zoom in or zoom out, so we need to use this to control
         private Vector3 ClampCamera(Vector3 targetPosition)
         {
-            float cameraHeight = _camera.orthographicSize;
-            float cameraWidth = _camera.orthographicSize * _camera.aspect;
+            var position = targetPosition.ToString();
+            // Debug.Log($"Wes - [BuildingCameraController] targetPosition = {position}");
+
+            float cameraHeight = _camera.orthographicSize * 2f;
+            float cameraWidth = cameraHeight * _camera.aspect;
 
             float minX = _mapMinX + cameraWidth;
             float maxX = _mapMaxX - cameraWidth;
 
-            Debug.Log($"Wes - _mapMinX = {_mapMinX}, cameraWidth = {cameraWidth} --> minX = {minX}");
-            Debug.Log($"Wes - _mapMaxX = {_mapMaxX}, cameraWidth = {cameraWidth} --> maxX = {maxX}");
+            // Debug.Log($"Wes - _mapMinX = {_mapMinX}, cameraWidth = {cameraWidth} --> minX = {minX}");
+            // Debug.Log($"Wes - _mapMaxX = {_mapMaxX}, cameraWidth = {cameraWidth} --> maxX = {maxX}");
 
             float minY = _mapMinY + cameraHeight;
-            float maxY = _mapMinY - cameraHeight;
+            float maxY = _mapMaxY - cameraHeight;
 
             float newX = Mathf.Clamp(targetPosition.x, minX, maxX);
             float newY = Mathf.Clamp(targetPosition.y, minY, maxY);
