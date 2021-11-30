@@ -861,6 +861,7 @@ GameObject:
   - component: {fileID: 2024615504}
   - component: {fileID: 2024615503}
   - component: {fileID: 2024615506}
+  - component: {fileID: 2024615507}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -940,15 +941,34 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2024615502}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 30cc53fa175e4aa1892e04634b56e2df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _camera: {fileID: 2024615504}
+  _sceneCamera: {fileID: 0}
   _zoomStep: 1
   _minCameraSize: 1
   _maxCameraSize: 11
   _zoomInButton: {fileID: 90861735}
   _zoomOutButton: {fileID: 1844995954}
+  _mapRenderer: {fileID: 108357037}
+--- !u!114 &2024615507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2024615502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02b5e775f17a89545a539fe858130a70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoomMin: 1
+  zoomMax: 11
+  _sceneCamera: {fileID: 2024615504}
+  _zoomStep: 1
+  _minCameraSize: 1
+  _maxCameraSize: 11
   _mapRenderer: {fileID: 108357037}

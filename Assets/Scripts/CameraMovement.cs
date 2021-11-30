@@ -8,7 +8,7 @@ namespace Project.Movement
     public class CameraMovement : MonoBehaviour
     {
         [SerializeField]
-        private Camera _camera = null;
+        private Camera _sceneCamera = null;
 
         [SerializeField]
         private float _zoomStep = 1;
@@ -60,13 +60,18 @@ namespace Project.Movement
             // Save position of mouse in world space when drag starts (first time clicked)
             if (Input.GetMouseButtonDown(0))
             {
-                _dragOrigin = _camera.ScreenToWorldPoint(Input.mousePosition);
+                _dragOrigin = _sceneCamera.ScreenToWorldPoint(Input.mousePosition);
             }
 
-            // Calculate distance between drag origin and new position if it is still held down
-            if (Input.GetMouseButton(0))
+
+            if (Input.touchCount == 2)
             {
-                var newPosition = _camera.ScreenToWorldPoint(Input.mousePosition);
+
+            }
+            // Calculate distance between drag origin and new position if it is still held down
+            else if (Input.GetMouseButton(0))
+            {
+                var newPosition = _sceneCamera.ScreenToWorldPoint(Input.mousePosition);
                 var difference = _dragOrigin - newPosition;
 
                 // Debug.Log($"Wes - _dragOrigin = {_dragOrigin}, newPosition = {newPosition} --> difference = {difference}");
@@ -74,7 +79,9 @@ namespace Project.Movement
                 // Move the camera by that distance
                 // _camera.transform.position += difference;
 
-                _camera.transform.position = ClampCamera(_camera.transform.position + difference);
+                _sceneCamera.transform.position = ClampCamera(_sceneCamera.transform.position + difference);
+
+                
             }
 
             if (MouseScrollForward)
@@ -91,10 +98,10 @@ namespace Project.Movement
         private void ZoomCamera(CameraZoomMode mode)
         {
             int modeMultiplier = mode == CameraZoomMode.In ? -1 : 1;
-            float newSize = _camera.orthographicSize + _zoomStep * modeMultiplier;
-            _camera.orthographicSize = Mathf.Clamp(newSize, _minCameraSize, _maxCameraSize);
+            float newSize = _sceneCamera.orthographicSize + _zoomStep * modeMultiplier;
+            _sceneCamera.orthographicSize = Mathf.Clamp(newSize, _minCameraSize, _maxCameraSize);
             
-            _camera.transform.position = ClampCamera(_camera.transform.position);
+            _sceneCamera.transform.position = ClampCamera(_sceneCamera.transform.position);
         }
 
         // Because the size of camera may be changed by zoom in or zoom out, so we need to use this to control
@@ -103,8 +110,8 @@ namespace Project.Movement
             var position = targetPosition.ToString();
             // Debug.Log($"Wes - [BuildingCameraController] targetPosition = {position}");
 
-            float cameraHeight = _camera.orthographicSize * 2f;
-            float cameraWidth = cameraHeight * _camera.aspect;
+            float cameraHeight = _sceneCamera.orthographicSize * 2f;
+            float cameraWidth = cameraHeight * _sceneCamera.aspect;
 
             float minX = _mapMinX + cameraWidth;
             float maxX = _mapMaxX - cameraWidth;
