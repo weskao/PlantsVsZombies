@@ -962,11 +962,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2024615502}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02b5e775f17a89545a539fe858130a70, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e8697f545aa6724c94255bd72574dc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoomMin: 1
-  zoomMax: 11
   _sceneCamera: {fileID: 2024615504}
   _zoomStep: 1
   _minCameraSize: 1

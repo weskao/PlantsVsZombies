@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Project.Movement
 {
-    public class PanZoom : MonoBehaviour {
+    public class CameraController : MonoBehaviour {
         Vector3 touchStart;
 
         public bool MouseScrollForward => Input.GetAxis("Mouse ScrollWheel") > 0f;
