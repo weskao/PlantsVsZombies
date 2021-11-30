@@ -5,12 +5,6 @@ using UnityEngine.UI;
 
 namespace Project.Movement
 {
-    public enum CameraZoomMode
-    {
-        In,
-        Out
-    }
-
     public class CameraMovement : MonoBehaviour
     {
         [SerializeField]
