@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Project.Movement
 {
@@ -24,11 +25,22 @@ namespace Project.Movement
         [SerializeField]
         private SpriteRenderer _mapRenderer = null;
 
+        [SerializeField]
+        private Button _zoomInButton = null;
+
+        [SerializeField]
+        private Button _zoomOutButton = null;
+
         private float _mapMinX, _mapMaxX, _mapMinY, _mapMaxY;
         
         private void Awake()
         {
             SetCameraBound();
+        }
+
+        private void Update ()
+        {
+            DetectCameraMovement();
         }
         
         private void SetCameraBound()
@@ -40,14 +52,14 @@ namespace Project.Movement
             _mapMaxY = _mapRenderer.transform.position.y + _mapRenderer.bounds.size.y / 2f;
         }
 
-        private void Update () 
+        private void DetectCameraMovement()
         {
-            if(Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0))
             {
                 touchStart = _sceneCamera.ScreenToWorldPoint(Input.mousePosition);
             }
 
-            if(Input.touchCount == 2)
+            if (Input.touchCount == 2)
             {
                 Touch touchZero = Input.GetTouch(0);
                 Touch touchOne = Input.GetTouch(1);
@@ -62,10 +74,10 @@ namespace Project.Movement
 
                 ZoomCameraByTouch(difference * 0.01f);
             }
-            else if(Input.GetMouseButton(0))
+            else if (Input.GetMouseButton(0))
             {
                 Vector3 direction = touchStart - _sceneCamera.ScreenToWorldPoint(Input.mousePosition);
-                
+
                 // _sceneCamera.transform.position += direction;
                 _sceneCamera.transform.position = ClampCamera(_sceneCamera.transform.position + direction);
             }
