@@ -1268,7 +1268,7 @@ MonoBehaviour:
   _routes:
   - {fileID: 1444267173}
   - {fileID: 621712160}
-  _coroutineAllowed: 0
+  _coroutineAllowed: 1
 --- !u!1 &918945889
 GameObject:
   m_ObjectHideFlags: 0
