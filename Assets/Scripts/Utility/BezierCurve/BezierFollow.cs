@@ -13,6 +13,8 @@ namespace PocketLobby.Utility
         [SerializeField]
         private bool _coroutineAllowed;
 
+        private Coroutine _followRouteCoroutine;
+
         private List<Vector2> _nodePositionList = new List<Vector2>();
 
         private int _routeIndexToGo;
@@ -33,8 +35,22 @@ namespace PocketLobby.Utility
         {
             if (_coroutineAllowed && IsExistAnyRoute())
             {
-                _nodePositionList.Clear();
-                StartCoroutine(GoByTheRoute(_routeIndexToGo));
+                Init();
+                _followRouteCoroutine = StartCoroutine(GoByTheRoute(_routeIndexToGo));
+            }
+        }
+
+        private void Init()
+        {
+            _nodePositionList.Clear();
+            StopExistedCoroutine();
+        }
+
+        private void StopExistedCoroutine()
+        {
+            if (_followRouteCoroutine != null)
+            {
+                StopCoroutine(_followRouteCoroutine);
             }
         }
         
