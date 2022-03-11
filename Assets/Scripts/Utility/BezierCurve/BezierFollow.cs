@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace PocketLobby.Utility
 {
-    // reference: https://www.youtube.com/watch?v=11ofnLOE8pw
     public class BezierFollow : MonoBehaviour
     {
         [SerializeField]
@@ -13,6 +12,9 @@ namespace PocketLobby.Utility
         [SerializeField]
         private bool _coroutineAllowed;
 
+        [SerializeField]
+        private float _moveSpeed = 0.5f;
+
         private Coroutine _followRouteCoroutine;
 
         private List<Vector2> _nodePositionList = new List<Vector2>();
@@ -20,14 +22,12 @@ namespace PocketLobby.Utility
         private int _routeIndexToGo;
         private float _tParam;
         private Vector2 _targetObjectPosition;
-        private float _speedModifier;
         private const int ROUTES_CHILD_COUNT = 4;
 
         private void Start()
         {
             _routeIndexToGo = 0;
             _tParam = 0f;
-            _speedModifier = 0.5f;
             // _coroutineAllowed = true;
         }
 
@@ -61,7 +61,7 @@ namespace PocketLobby.Utility
 
             while (_tParam < 1)
             {
-                _tParam += Time.deltaTime * _speedModifier;
+                _tParam += Time.deltaTime * _moveSpeed;
 
                 _targetObjectPosition = Mathf.Pow(1 - _tParam, 3) * _nodePositionList[0] +
                                         3 * Mathf.Pow(1 - _tParam, 2) * _tParam * _nodePositionList[1] +
